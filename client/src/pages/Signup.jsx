@@ -10,19 +10,19 @@ export default function Signup() {
                 <input
                     type="text"
                     placeholder="Email Address"
-                    className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-1 focus:ring-rose-300"
+                    className="w-full mb-4 px-3 py-2 border-b md:border border-gray-300 md:rounded-3xl focus:outline-none focus:ring-1 focus:ring-rose-300"
                 />
                 <input
                     type="text"
                     placeholder="Username"
-                    className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-1 focus:ring-rose-300"
+                    className="w-full mb-4 px-3 py-2 border-b md:border border-gray-300 md:rounded-3xl focus:outline-none focus:ring-1 focus:ring-rose-300"
                 />
                 <input
                     type="password"
                     placeholder="Password"
-                    className="w-full mb-6 px-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-1 focus:ring-rose-300"
+                    className="w-full mb-4 px-3 py-2 border-b md:border border-gray-300 md:rounded-3xl focus:outline-none focus:ring-1 focus:ring-rose-300"
                 />
-                <button className="w-full bg-rose-300 text-white py-2 rounded-3xl hover:bg-rose-400 transition-colors duration-200">
+                <button className="w-full bg-rose-400 text-white py-2 rounded-3xl hover:bg-rose-500 transition-colors duration-200">
                     Sign Up
                 </button>
                 <button className="mt-4 text-center text-gray-600" onClick={()=>{navigate('/')}}>
