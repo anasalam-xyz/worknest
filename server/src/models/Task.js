@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import { Schema, model } from 'mongoose';
 
-const taskSchema = new mongoose.Schema({
+const taskSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -17,20 +16,25 @@ const taskSchema = new mongoose.Schema({
         default: "pending"
     },
     assignedTo: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     projectId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Project',
         required: true
     },
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    priority: {
+        type: String,
+        enum: ["lowest", "low", "medium", "high", "urgent", "critical"],
+        default: "low"
     }
 }, { timestamps: true} );
 
-module.exports = mongoose.model('Task', taskSchema);
+export default model('Task', taskSchema);
