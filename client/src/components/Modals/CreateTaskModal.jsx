@@ -1,38 +1,90 @@
 import Modal from "./Modal";
+import { useState } from "react";
+import API from "../../api/axios";
 
-export default function CreateTaskModal({ isOpen, onClose }) {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create Task">
-      <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="Task Title"
-          className="w-full border border-gray-400 rounded-3xl p-2"
-        />
+export default function CreateTaskModal({ project, isOpen, onClose, refreshTasks }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("low");
+  const [taskStatus, setTaskStatus] = useState("pending");
+  const [assignedTo, setAssignedTo] = useState("");
+  const projectId = project._id;
+  const members = project?project.members:[];
+  const owner = project?project.owner:{};
 
-        <textarea
-          type="text"
-          rows={5}
-          placeholder="Description"
-          className="w-full border border-gray-400 rounded-3xl p-2"
-        />
+  const handleCreateTask = async () => {
+    if (!title) {
+      console.log("Missing fields");
+      return;
+    }
+    try {
+      const res = await API.post(`/tasks/project/${projectId}`, {
+        title,
+        description,
+        priority,
+        status: taskStatus,
+        assignedTo
+      });
 
-        <select className="w-full border border-gray-400 rounded-3xl p-2">
-          <option selected>Assign task to--</option>
-          <option>Alice</option>
-          <option>Smith</option>
-          <option>William</option>
-        </select>
-        <select className="w-full border border-gray-400 rounded-3xl p-2">
-          <option selected>To Do</option>
-          <option>In Progress</option>
-          <option>Completed</option>
-        </select>
+        console.log("Task created:", res.data);
 
-        <button className="w-full bg-rose-400 text-white py-2 rounded-3xl hover:bg-rose-500">
-          Done
-        </button>
-      </div>
-    </Modal>
-  );
-}
+        setTitle("");
+        setDescription("");
+        setPriority("low");
+        setTaskStatus("pending");
+        setAssignedTo("");
+        refreshTasks();
+        onClose();
+      } catch (err) {
+        //console.error(err.response?.data?.message || "Failed to create project");
+        console.error(err);
+        onClose();
+      }
+    }
+    return (
+      <Modal isOpen={isOpen} onClose={onClose} title="Create Task">
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Task Title"
+            className="w-full border border-gray-400 rounded-3xl p-2" 
+            value={title} onChange={(e)=>setTitle(e.target.value)}
+          />
+
+          <textarea
+            type="text"
+            rows={5}
+            placeholder="Description"
+            className="w-full border border-gray-400 rounded-3xl p-2"
+            value={description} onChange={(e)=>setDescription(e.target.value)}
+          />
+
+          <select className="w-full border border-gray-400 rounded-3xl p-2" value={assignedTo} onChange={(e)=>setAssignedTo(e.target.value)}>
+            <option value="" disabled>--Assign To--</option>
+            {owner&&<option key={owner._id} value={owner._id}>{owner.username}</option>}
+            {members&&members.map((member)=>(
+              <option key={member._id} value={member._id}>{member.username}</option>))}
+          </select>
+          
+          <select className="w-full border border-gray-400 rounded-3xl p-2" value={taskStatus} onChange={(e)=>setTaskStatus(e.target.value)}>
+            <option  value="pending">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+          <select value={priority} className="w-full border border-gray-400 rounded-3xl p-2" onChange={(e)=>setPriority(e.target.value)}>
+            <option value="" disabled>--Priority--</option>
+            <option value="lowest">Lowest</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+            <option value="critical">Critical</option>
+          </select>
+
+          <button className="w-full bg-rose-400 text-white py-2 rounded-3xl hover:bg-rose-500" onClick={handleCreateTask}>
+            Done
+          </button>
+        </div>
+      </Modal>
+    );
+  }

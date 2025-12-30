@@ -4,7 +4,7 @@ import Project from '../models/Project.js'
 export const createTask = async (req, res) => {
     try {
         const { projectId } = req.params;
-        const { title, description, assignedTo, priority } = req.body;
+        const { title, description, assignedTo, priority, status } = req.body;
         // check if user has access to the project
         const project = await Project.findOne({
             _id: projectId,
@@ -20,6 +20,7 @@ export const createTask = async (req, res) => {
         const task = await Task.create({
             title,
             description,
+            status,
             projectId,
             assignedTo,
             createdBy: req.user.id,

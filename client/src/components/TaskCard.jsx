@@ -5,11 +5,12 @@ import { useState } from "react";
 export default function TaskCard({ title, color, user }) {
     const [showActionModal, setShowActionModal] = useState({open:false, x:0, y:0});
     const colorMap = {
-        emerald: "bg-emerald-200",
-        rose: "bg-rose-200",
-        teal: "bg-teal-200",
+        purple: "bg-purple-200",
+        red: "bg-red-200",
+        orange: "bg-orange-200",
         amber: "bg-amber-200",
-        fuchsia: "bg-fuchsia-200",
+        yellow: "bg-yellow-200",
+        green: "bg-green-200",
     };
     const handleActionMenuOpen = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -21,8 +22,8 @@ export default function TaskCard({ title, color, user }) {
     };
 
     return (
-        <div className={`w-full max-w-xl p-4 rounded-xl shadow-lg ${colorMap[color]} m-4`}>
-            <h3 className="flex flex-row justify-between text-base text-gray-900 mb-1">
+        <div className={`w-full max-w-xs p-4 rounded-xl shadow-lg ${colorMap[color]} m-4`}>
+            <h3 className="flex flex-row justify-between break-words text-base text-gray-900 mb-1">
                 {title}
                 <EllipsisVerticalIcon className="size-4 text-gray-800 hover:text-gray-1000" onClick={handleActionMenuOpen} />
             </h3>

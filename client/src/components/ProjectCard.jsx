@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
-export default function Project({ title, color, progress }) {
+export default function ProjectCard({ project, color, progress }) {
     const navigate = useNavigate();
     const handleViewProject = () => {
-        navigate('/tasks');
+        navigate(`/project/${project._id}`);
     }
     const colorMap = {
         emerald: "bg-emerald-200",
@@ -19,7 +19,7 @@ export default function Project({ title, color, progress }) {
                     <span className="text-blue-600 text-lg">📁</span>
                 </div>
                 <h2 className="text-lg font-semibold font-sans text-gray-800">
-                    {title}
+                    {project.name}
                 </h2>
             </div>
             <div className="relative w-full h-6 bg-gray-200 rounded-full mb-4 overflow-hidden">
