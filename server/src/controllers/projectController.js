@@ -1,18 +1,74 @@
 import Project from '../models/Project.js'
+import mongoose from 'mongoose'
 
 export const getUserProjects = async (req, res) => {
     try {
-        const projects = await Project.find({
-            $or: [
-                { owner: req.user.id },
-                { members: req.user.id },
-            ]
-        });
+        const userId = new mongoose.Types.ObjectId(req.user.id);
+
+        const projects = await Project.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { owner: userId },
+                        { members: userId }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "_id",
+                    foreignField: "projectId",
+                    as: "tasks"
+                }
+            },
+            {
+                $addFields: {
+                    progress: {
+                        $cond: [
+                            { $eq: [{ $size: "$tasks" }, 0] },
+                            0,
+                            {
+                                $round: [
+                                    {
+                                        $multiply: [
+                                            {
+                                                $divide: [
+                                                    {
+                                                        $size: {
+                                                            $filter: {
+                                                                input: "$tasks",
+                                                                as: "t",
+                                                                cond: { $eq: ["$$t.status", "completed"] }
+                                                            }
+                                                        }
+                                                    },
+                                                    { $size: "$tasks" }
+                                                ]
+                                            },
+                                            100
+                                        ]
+                                    },
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                $project: {
+                    tasks: 0,
+                    passkey: 0
+                }
+            }
+        ]);
+
         res.json(projects);
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
-}
+};
 export const getProjectById = async (req, res) => {
     try {
         const project = await Project.findOne({
@@ -96,6 +152,6 @@ export const deleteProject = async (req, res) => {
         }
         res.json({ message: 'Project deleted successfully' });
     } catch (e) {
-        res.status(500).json({message: e.message});
+        res.status(500).json({ message: e.message });
     }
 }

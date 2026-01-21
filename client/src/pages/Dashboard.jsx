@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard'
 import { useState, useEffect } from 'react';
 
 export default function Dashboard() {
+
     const [projects, setProjects] = useState([]);
     const getUserProjects = async () => {
         try {
@@ -16,7 +17,6 @@ export default function Dashboard() {
         }
     };
     useEffect(() => {
-        console.log("useeffect");
         getUserProjects();
     }, []);
     const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
@@ -27,20 +27,17 @@ export default function Dashboard() {
     const handleJoinProject = () => {
         setShowJoinProjectModal(true);
     }
-    console.log("projects:",projects)
+    
     return (
-        <div className='min-h-screen'>
-            <h1 className='bg-rose-50 pt-10 px-[10%] text-3xl text-blue-300 font-mono'>My Projects</h1>
+        <div className='min-h-screen bg-rose-50'>
+            <h1 className='pt-10 px-[10%] text-3xl text-blue-300 font-mono'>My Projects</h1>
             <div className='flex flex-col-reverse sm:flex-row justify-around bg-rose-50 px-6 md:px-24'>
                 <div className="py-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {projects && projects.map((project) => {
-                            let colors = ['emerald', 'rose', 'teal', 'amber', 'fuchsia'];
-
                             return(<ProjectCard 
                                 key={project._id}
-                                project={project}
-                                color={colors[Math.floor(Math.random()*colors.length)]} 
-                                progress={Math.floor(Math.random()*100)} />);
+                                project={project} 
+                            />);
                         }
                     )}
                 </div>

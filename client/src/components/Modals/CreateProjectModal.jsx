@@ -30,7 +30,6 @@ export default function CreateProjectModal({ isOpen, onClose, refreshProjects })
       refreshProjects();
       onClose();
     } catch (err) {
-      //console.error(err.response?.data?.message || "Failed to create project");
       console.error(err);
     }
   }

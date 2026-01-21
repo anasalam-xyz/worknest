@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
-export default function ProjectCard({ project, color, progress }) {
+export default function ProjectCard({ project }) {
+    const { progress } = project;
     const navigate = useNavigate();
     const handleViewProject = () => {
         navigate(`/project/${project._id}`);
     }
-    const colorMap = {
-        emerald: "bg-emerald-200",
-        rose: "bg-rose-200",
-        teal: "bg-teal-200",
-        amber: "bg-amber-200",
-        fuchsia: "bg-fuchsia-200",
+    const getProgressColor = (progress) => {
+        if (progress === 100) return "bg-emerald-300";
+        if (progress >= 70) return "bg-teal-300";
+        if (progress >= 40) return "bg-amber-300";
+        if (progress > 0) return "bg-rose-300";
+        return "bg-gray-300";
     };
     return (
         <div className="flex flex-col justify-center w-full md:w-80 bg-white rounded-xl shadow-md p-5 m-1">
@@ -23,7 +24,7 @@ export default function ProjectCard({ project, color, progress }) {
                 </h2>
             </div>
             <div className="relative w-full h-6 bg-gray-200 rounded-full mb-4 overflow-hidden">
-                <div className={`absolute left-0 top-0 h-full ${colorMap[color]} rounded-full `} style={{ width: `${progress}%` }}></div>
+                <div className={`absolute left-0 top-0 h-full ${getProgressColor(progress)} rounded-full `} style={{ width: `${progress}%` }}></div>
                 <div className="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-700">
                     {progress}% Complete
                 </div>

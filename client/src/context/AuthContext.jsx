@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const fetchUser = async () => {
-      console.log("hello")
         try {
             const res = await API.post("/auth/profile");
             setUser(res.data);

@@ -1,9 +1,12 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import ActionMenuModal from "./Modals/ActionMenuModal";
+import EditTaskModal from "./Modals/EditTaskModal";
 import { useState } from "react";
+import API from "../api/axios";
 
-export default function TaskCard({ title, color, user }) {
-    const [showActionModal, setShowActionModal] = useState({open:false, x:0, y:0});
+export default function TaskCard({ owner, members, task, title, color, user, taskid, fetchTasks}) {
+    const [showActionModal, setShowActionModal] = useState({ open: false, x: 0, y: 0 });
+    const [ShowEditTaskModal, setShowEditTaskModal] = useState(false);
     const colorMap = {
         purple: "bg-purple-200",
         red: "bg-red-200",
@@ -17,9 +20,20 @@ export default function TaskCard({ title, color, user }) {
         setShowActionModal({
             open: true,
             x: rect.left - 140,
-            y: rect.top + rect.height / 2 ,
+            y: rect.top + rect.height / 2,
         });
     };
+    const handleEditTask = async () => {
+        setShowEditTaskModal(true);
+    }
+    const handleDeleteTask = async () => {
+        try {
+            await API.delete(`/tasks/${taskid}`);
+            fetchTasks();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className={`w-full max-w-xs p-4 rounded-xl shadow-lg ${colorMap[color]} m-4`}>
@@ -37,9 +51,17 @@ export default function TaskCard({ title, color, user }) {
                 isOpen={showActionModal.open}
                 x={showActionModal.x}
                 y={showActionModal.y}
-                onClose={() => setShowActionModal({open: false, x:0, y:0})}
-                onEdit={() => console.log("edit")}
-                onDelete={() => console.log("delete")}
+                onClose={() => setShowActionModal({ open: false, x: 0, y: 0 })}
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+            />
+            <EditTaskModal
+                isOpen={ShowEditTaskModal} 
+                onClose={()=> setShowEditTaskModal(false)}
+                task={task} 
+                members={members}
+                owner={owner}
+                refreshTasks={fetchTasks}
             />
         </div>
     );
