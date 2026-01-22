@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import EditProjectModal from "../components/Modals/EditProjectModal";
+import { toast } from 'react-hot-toast'
 
 export default function Project() {
     const [showEditProjectModal, setShowEditProjectModal] = useState(false);
@@ -37,6 +38,7 @@ export default function Project() {
             const res = await API.get(`/projects/${projectId}`);
             setProject(res.data);
         } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong.");
             console.log(error);
         }
     }
@@ -46,6 +48,7 @@ export default function Project() {
             const res = await API.get(`/tasks/project/${projectId}`);
             setTasks(res.data);
         } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong.");
             console.log(error);
         }
     }
@@ -61,7 +64,9 @@ export default function Project() {
         try {
             await API.delete(`/projects/${projectId}`);
             navigate('/dashboard');
+            toast.success("Project Deleted.");
         } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong.");
             console.log(error);
         }
     }
@@ -101,9 +106,9 @@ export default function Project() {
                         <ArrowLeftIcon className="mt-2 mx-2 size-6 text-blue-300 hover:text-blue-400" onClick={handlePrevPage} />
                         <h2 className='w-full bg-rose-50 text-3xl text-gray-600 font-sans'>{project.name}</h2>
                     </div>
-                    <div className="flex flex-row p-2 hover:bg-blue-50 rounded-full">
+                    <div className="flex flex-row p-2 rounded-full">
                         {isOwner && (<Cog8ToothIcon className="size-6 text-blue-300 hover:text-blue-400" onClick={handleEditProject} />)}
-                        <TrashIcon className="mx-2 size-6 text-blue-300 hover:text-blue-400" onClick={handleDeleteProject} />
+                        {isOwner && (<TrashIcon className="mx-2 size-6 text-blue-300 hover:text-blue-400" onClick={handleDeleteProject} />)}
                     </div>
                 </div>
                 <button className="my-2 sm:my-0 w-full sm:w-32 bg-blue-400 text-white py-2 rounded-3xl hover:bg-blue-500 transition-colors duration-200" onClick={() => { setShowCreateTask(true) }}>Create Task</button>

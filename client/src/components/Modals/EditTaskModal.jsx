@@ -1,6 +1,7 @@
 import Modal from "./Modal";
 import { useState } from "react";
 import API from "../../api/axios";
+import { toast } from 'react-hot-toast'
 
 export default function EditTaskModal({ owner, members, isOpen, onClose, refreshTasks, task }) {
   const [title, setTitle] = useState(task.title);
@@ -11,8 +12,8 @@ export default function EditTaskModal({ owner, members, isOpen, onClose, refresh
   const taskId = task._id;
 
   const handleEditTask = async () => {
-    if (!title) {
-      console.log("Missing fields");
+    if (!title || !description || !assignedTo) {
+      toast.error("Missing fields");
       return;
     }
     try {
@@ -23,13 +24,12 @@ export default function EditTaskModal({ owner, members, isOpen, onClose, refresh
         status: taskStatus,
         assignedTo
       });
-
-        console.log("Task edited :", res.data);
-
+      
+        toast.success("Task Updated.");
         refreshTasks();
         onClose();
       } catch (err) {
-        //console.error(err.response?.data?.message || "Failed to create project");
+        toast.error(err.response?.data?.message || "Something went wrong.");
         console.error(err);
         onClose();
       }

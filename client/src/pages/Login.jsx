@@ -27,7 +27,8 @@ export default function Login() {
                 getUserInfo();
             }
         } catch (err) {
-            setError(err.response?.data?.message || "Something went wrong");
+            setError(err.response?.data?.message || "Please check the credentials and try again.");
+            setTimeout(() => setError(""), 2000);
         }
     }
     return (

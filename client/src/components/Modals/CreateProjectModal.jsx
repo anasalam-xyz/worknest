@@ -1,6 +1,7 @@
 import Modal from "./Modal";
 import API from "../../api/axios";
 import { useState } from "react";
+import { toast } from 'react-hot-toast'
 
 export default function CreateProjectModal({ isOpen, onClose, refreshProjects }) {
   const [name, setName] = useState("");
@@ -20,8 +21,8 @@ export default function CreateProjectModal({ isOpen, onClose, refreshProjects })
         code,
         passkey
       });
-
-      console.log("Project created:", res.data);
+      
+      toast.success("Project Created Successfully.");
 
       setName("");
       setDescription("");
@@ -30,6 +31,7 @@ export default function CreateProjectModal({ isOpen, onClose, refreshProjects })
       refreshProjects();
       onClose();
     } catch (err) {
+      toast.error(err.response?.data?.message);
       console.error(err);
     }
   }

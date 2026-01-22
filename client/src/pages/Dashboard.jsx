@@ -10,8 +10,7 @@ export default function Dashboard() {
     const getUserProjects = async () => {
         try {
             const res = await API.get("/projects");
-            setProjects(res.data); 
-            console.log(res.data);
+            setProjects(res.data);
         } catch (err) {
             console.error(err);
         }
@@ -27,18 +26,18 @@ export default function Dashboard() {
     const handleJoinProject = () => {
         setShowJoinProjectModal(true);
     }
-    
+
     return (
         <div className='min-h-screen bg-rose-50'>
             <h1 className='pt-10 px-[10%] text-3xl text-blue-300 font-mono'>My Projects</h1>
             <div className='flex flex-col-reverse sm:flex-row justify-around bg-rose-50 px-6 md:px-24'>
                 <div className="py-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {projects && projects.map((project) => {
-                            return(<ProjectCard 
-                                key={project._id}
-                                project={project} 
-                            />);
-                        }
+                        return (<ProjectCard
+                            key={project._id}
+                            project={project}
+                        />);
+                    }
                     )}
                 </div>
                 <div>

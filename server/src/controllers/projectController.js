@@ -100,7 +100,7 @@ export const createProject = async (req, res) => {
         res.status(201).json(project);
     } catch (e) {
         if (e.code === 11000) {
-            return res.status(400).json({ message: 'Project code already exists' });
+            return res.status(400).json({ message: 'This Code is taken. Try something else.' });
         }
         res.status(500).json({ error: e.message });
     }
@@ -117,7 +117,7 @@ export const joinProject = async (req, res) => {
         }
         // already owner or member
         if (project.owner.toString() === req.user.id || project.members.includes(req.user.id)) {
-            return res.status(400).json({ message: 'Already part of this project' });
+            return res.status(400).json({ message: 'Project already exists in your dashboard.' });
         }
         project.members.push(req.user.id);
         await project.save();

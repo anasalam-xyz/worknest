@@ -3,6 +3,7 @@ import ActionMenuModal from "./Modals/ActionMenuModal";
 import EditTaskModal from "./Modals/EditTaskModal";
 import { useState } from "react";
 import API from "../api/axios";
+import { toast } from 'react-hot-toast'
 
 export default function TaskCard({ owner, members, task, title, color, user, taskid, fetchTasks}) {
     const [showActionModal, setShowActionModal] = useState({ open: false, x: 0, y: 0 });
@@ -29,8 +30,10 @@ export default function TaskCard({ owner, members, task, title, color, user, tas
     const handleDeleteTask = async () => {
         try {
             await API.delete(`/tasks/${taskid}`);
+            toast.success("Task Deleted.");
             fetchTasks();
         } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong.");
             console.log(error);
         }
     }

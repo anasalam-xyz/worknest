@@ -1,6 +1,7 @@
 import Modal from "./Modal";
 import { useState } from "react";
 import API from "../../api/axios";
+import {toast } from 'react-hot-toast'
 
 export default function JoinProjectModal({ isOpen, onClose, refreshProjects }) {
   const [code, setCode] = useState("");
@@ -24,7 +25,7 @@ export default function JoinProjectModal({ isOpen, onClose, refreshProjects }) {
       refreshProjects();
       onClose();
     } catch (err) {
-      //console.error(err.response?.data?.message || "Failed to create project");
+      toast.error(err.response?.data?.message || "Failed to Join project");
       console.error(err);
     }
   }
