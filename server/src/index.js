@@ -11,7 +11,13 @@ import taskRoutes from './routes/taskRoutes.js'
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://worknest-teams.vercel.app"
+    ],
+    credentials: true
+}));
 app.use(json());
 
 app.get('/api/test', (req, res) => {
