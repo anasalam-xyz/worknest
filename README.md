@@ -6,6 +6,19 @@ Built with a developer-first mindset, WorkNest balances **simplicity, performanc
 
 ---
 
+## Demo Accounts
+
+Feel free to use these to explore the app:
+
+| Email              | Password   |
+|--------------------|------------|
+| demo1@worknest.com | Demo1234   |
+| demo2@worknest.com | Demo1234   |
+| demo3@worknest.com | Demo1234   |
+| demo4@worknest.com | Demo1234   |
+
+---
+
 ## Features
 
 * **Authentication & Authorization**
